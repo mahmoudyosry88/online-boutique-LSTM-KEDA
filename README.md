@@ -31,21 +31,33 @@ A heavy burst of 800 concurrent users was simulated over 22 minutes to compare t
 - Prometheus & KEDA installed
 - Python 3.10+
 
-### 2. Live Production Daemon
+### 2. Data Generation & Training Pipeline (Phase 1)
+To generate the 6-hour diurnal traffic dataset and train the LSTM model from scratch:
+```bash
+# 1. Generate diurnal traffic and collect metrics (6 hours)
+cd lstm_autoscaler/scripts/pipeline
+python run_pipeline.py
+
+# 2. Train the Global LSTM Regressor
+cd ../ml
+python train_lstm.py
+```
+
+### 3. Live Production Pipeline (Phase 2)
 To run the proactive autoscaler AI daemon in the background:
 ```bash
 cd lstm_autoscaler/scripts/live_production_daemon
 python live_predictor.py
 ```
 
-### 3. Running the Flash-Crowd Locust Test
-To simulate the 800-user burst pattern:
+### 4. Running the Flash-Crowd Locust Test (Phase 3)
+To simulate the 800-user burst pattern against the active AI daemon:
 ```bash
 cd lstm_autoscaler/scripts/live_production_daemon
 python run_master_pipeline.py
 ```
 
-### 4. Generating the Comparison Dashboard
+### 5. Generating the Comparison Dashboard
 After collecting datasets from both HPA and LSTM experiments, run the analysis script to generate the final plots:
 ```bash
 cd lstm_autoscaler/scripts/live_production_daemon
