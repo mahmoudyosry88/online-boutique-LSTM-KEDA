@@ -43,3 +43,5 @@ report.txt
 pres.txt
 
 istio-*/
+
+lstm_autoscaler/docs/
