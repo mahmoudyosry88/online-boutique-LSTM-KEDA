@@ -1,0 +1,11 @@
+Service,Accuracy (%),Precision (Macro),Recall (Macro),F1-Score (Macro),Type 1 Error (Over-provisioned) %,Type 2 Error (Under-provisioned) %,Total Samples
+adservice,100.0,1.0,1.0,1.0,0.0,0.0,85
+cartservice,100.0,1.0,1.0,1.0,0.0,0.0,85
+checkoutservice,100.0,1.0,1.0,1.0,0.0,0.0,85
+currencyservice,100.0,1.0,1.0,1.0,0.0,0.0,85
+emailservice,100.0,1.0,1.0,1.0,0.0,0.0,85
+frontend,100.0,1.0,1.0,1.0,0.0,0.0,85
+paymentservice,100.0,1.0,1.0,1.0,0.0,0.0,85
+productcatalogservice,100.0,1.0,1.0,1.0,0.0,0.0,85
+recommendationservice,100.0,1.0,1.0,1.0,0.0,0.0,85
+shippingservice,100.0,1.0,1.0,1.0,0.0,0.0,85

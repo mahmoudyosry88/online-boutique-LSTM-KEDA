@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Autoscaling Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; font-size: 2.5em; text-transform: uppercase; letter-spacing: 1px; }
+        .dashboard-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1400px; margin: 0 auto; }
+        .card { background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; text-align: center; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); }
+        .card h2 { font-size: 1.5em; color: #34495e; margin-top: 0; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
+        .card img { max-width: 100%; height: auto; border-radius: 5px; }
+        .full-width { grid-column: span 2; }
+        .mermaid { background: #fff; padding: 20px; border-radius: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); }
+        .footer { text-align: center; margin-top: 40px; color: #7f8c8d; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <h1>Microservices Autoscaling Intelligence Dashboard</h1>
+    
+    <div class="dashboard-container">
+        <!-- 1. General Flowchart -->
+        <div class="card full-width">
+            <h2>1. General E-Commerce Business Flow</h2>
+            <div class="mermaid">
+                graph TD
+                %% Styles
+                classDef user fill:#2ecc71,stroke:#27ae60,stroke-width:2px,color:#fff
+                classDef frontend fill:#3498db,stroke:#2980b9,stroke-width:2px,color:#fff
+                classDef backend fill:#95a5a6,stroke:#7f8c8d,stroke-width:2px,color:#fff
+                
+                %% Nodes
+                Users((Users)):::user -->|Browse & Shop| Frontend[Frontend Web]:::frontend
+                
+                Frontend --> Cart[Cart Service]:::backend
+                Frontend --> Product[Product Catalog]:::backend
+                Frontend --> Rec[Recommendation]:::backend
+                
+                Cart --> Checkout[Checkout Service]:::backend
+                Checkout --> Payment[Payment Service]:::backend
+                Checkout --> Shipping[Shipping Service]:::backend
+                Checkout --> Email[Email Notification]:::backend
+            </div>
+            <p style="margin-top: 10px; color: #7f8c8d; font-style: italic;">High-level view of how user traffic flows through the e-commerce microservices.</p>
+        </div>
+
+        <!-- 2. Project Blueprint Flowchart -->
+        <div class="card full-width">
+            <h2>2. Project Execution Blueprint (Experimental Workflow)</h2>
+            <div class="mermaid">
+                graph TD
+                %% Styles
+                classDef infra fill:#34495e,stroke:#2c3e50,stroke-width:2px,color:#fff
+                classDef data fill:#f39c12,stroke:#e67e22,stroke-width:2px,color:#fff
+                classDef script fill:#8e44ad,stroke:#9b59b6,stroke-width:2px,color:#fff
+                classDef result fill:#27ae60,stroke:#2ecc71,stroke-width:2px,color:#fff
+
+                subgraph Phase 1: Simulation & Data Collection
+                    Locust[Locust Load Generator]:::infra -->|Traffic Simulation| App[Online Boutique Microservices Demo]:::infra
+                    App -->|Metrics| Prom[Prometheus]:::infra
+                    Prom -->|Data Extraction| CSV1[(autoscaling_training_dataset.csv)]:::data
+                end
+
+                subgraph Phase 2: LSTM Model Training
+                    CSV1 -->|70% Train / 15% Val| Train[train_lstm.py]:::script
+                    Train -->|Exports Weights| Model[(best_lstm_final.pt)]:::data
+                end
+
+                subgraph Phase 3: Testing & Inference
+                    CSV1 -->|15% Unseen Test Data| Predict[predict_lstm.py]:::script
+                    Model -->|Loads Model| Predict
+                    Predict -->|Generates Predictions & Plots| CSV2[(predictions_tau_0_45.csv + Plots)]:::data
+                end
+
+                subgraph Phase 4: Results & Evaluation
+                    CSV2 --> Eval[Evaluation Metrics]:::script
+                    Eval --> Final[Final Results:<br>Accuracy: 100%<br>MAE: 0.0926<br>MSE: 0.0128<br>Tau: 0.45]:::result
+                end
+            </div>
+            <p style="margin-top: 10px; color: #7f8c8d; font-style: italic;">The end-to-end blueprint of the project: From generating traffic and collecting data, to training the model and extracting final visual results.</p>
+        </div>
+
+        <h1 class="full-width" style="margin-top: 40px; border-bottom: 2px solid #ccc; padding-bottom: 10px;">Part 1: Data Exploration & Correlations</h1>
+
+        <div class="card">
+            <h2>Base Feature Correlation Heatmap</h2>
+            <img src="1_Correlation_Heatmap.png" alt="Base Correlation Heatmap">
+        </div>
+
+        <div class="card">
+            <h2>Advanced Feature Correlation (Pairplot)</h2>
+            <img src="Advanced_3_Pairplot.png" alt="Pairplot">
+        </div>
+
+        <h1 class="full-width" style="margin-top: 40px; border-bottom: 2px solid #ccc; padding-bottom: 10px;">Part 2: System Behavior & Workload Analysis</h1>
+
+        <div class="card full-width">
+            <h2>Locust Workload: Simulated Users vs RPS</h2>
+            <img src="2_Traffic_Load.png" alt="Traffic Load">
+        </div>
+
+        <div class="card full-width">
+            <h2>Advanced Timeline: Traffic Load & Autoscaling Triggers</h2>
+            <img src="Advanced_1_Timeline_Events.png" alt="Timeline Graph">
+        </div>
+
+        <div class="card full-width">
+            <h2>CPU Spikes Triggering Scaling Events (Cartservice)</h2>
+            <img src="3_CPU_vs_Scaling.png" alt="CPU vs Scaling">
+        </div>
+
+        <div class="card full-width">
+            <h2>Multi-Resource Constraints & Thresholds (Cartservice)</h2>
+            <img src="Advanced_2_Resource_Thresholds.png" alt="Resource thresholds">
+        </div>
+
+        <div class="card full-width">
+            <h2>Maintaining Low Latency Under Pressure</h2>
+            <img src="4_Latency_Stability.png" alt="Latency Stability">
+        </div>
+
+        <div class="card full-width">
+            <h2>Scaling Variation: Maximum Replicas Reached per Service</h2>
+            <img src="6_Service_Scaling_Variation.png" alt="Service Scaling Variation">
+        </div>
+
+        <h1 class="full-width" style="margin-top: 40px; border-bottom: 2px solid #ccc; padding-bottom: 10px;">Part 3: AI Model Performance & Results</h1>
+
+        <div class="card full-width">
+            <h2>Comprehensive ML & Business Evaluation Metrics</h2>
+            <img src="Advanced_5_Comprehensive_Metrics.png" alt="Comprehensive Metrics Table">
+        </div>
+
+        <div class="card">
+            <h2>Global Model Accuracy & Regression Metrics</h2>
+            <img src="5_Global_Accuracy_Donut.png" alt="Global Accuracy">
+        </div>
+
+        <div class="card">
+            <h2>Base Confusion Matrix (100% Alignment)</h2>
+            <img src="7_Global_Confusion_Matrix.png" alt="Base Confusion Matrix">
+        </div>
+
+        <div class="card full-width">
+            <h2>Advanced Confusion Matrix & Class Metrics</h2>
+            <img src="Advanced_4_Confusion_Metrics.png" alt="Confusion Matrix and Precision/Recall">
+        </div>
+    </div>
+    
+    <div class="footer">
+        Generated by LSTM Autoscaler Analysis Pipeline
+    </div>
+    
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>
