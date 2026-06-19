@@ -1,0 +1,99 @@
+# Configuration file for the LSTM autoscaling experiments.
+# This file centralizes file paths, Kubernetes connection details, and 
+# neural network hyperparameters used throughout the evaluation.
+
+paths:
+  # Base project directory
+  base_dir: C:\ex1\microservices-demo\lstm_autoscaler
+  
+  # Output directories
+  logs_dir: outputs\logs
+  predictions_dir: outputs\prediction_plots
+  
+  # Script definitions
+  locust_file: scripts\pipeline\locustfile_v_2.py
+  collect_script: scripts\pipeline\collect_training_dataset_from_prometheus.py
+  train_script: scripts\ml\train_lstm.py
+  predict_script: scripts\ml\predict_lstm.py
+  
+  # Data paths (Inputs and Outputs)
+  workload_file: data\raw\boutique_workload_large.json
+  users_log: data\processed\users_per_segment.json
+  dataset_csv: data\processed\autoscaling_training_dataset.csv
+  predictions_csv: data\processed\predictions_tau_0_45.csv
+  
+  # Saved PyTorch deep learning model checkpoint
+  checkpoint: models\best_lstm_final.pt
+
+prometheus:
+  # Configuration for extracting telemetry metrics from the Kubernetes cluster
+  url: http://localhost:9090
+  namespace: default
+  step: 15s           # Data resolution: How often to sample metrics
+  chunk_hours: 2      # Pagination logic to prevent API timeouts during heavy extraction
+
+pipeline:
+  # Load testing duration and segments
+  total_duration_hours: 6
+  segment_duration_minutes: 10
+  segment_timeout_buffer_seconds: 180 # Extra time allowed for a segment to finish before it is forcefully killed
+  locust_spawn_rate: 20               # How fast users are added per second (e.g., 20 new users per second) until the target is reached
+  
+  # Kubernetes internal ports mapping for local machine access
+  ports:
+    prometheus: 9090
+    frontend: 8080
+    grafana: 3000
+
+data:
+  # Defines the architecture of the Dataset fed into the LSTM
+  services:
+    - adservice
+    - cartservice
+    - checkoutservice
+    - currencyservice
+    - emailservice
+    - frontend
+    - paymentservice
+    - productcatalogservice
+    - recommendationservice
+    - shippingservice
+  
+  # Specific override mappings to merge dependencies into a single entity.
+  # For example, redis-cart is a separate database pod, but functionally belongs to cartservice.
+  # This mapping forces the LSTM to treat them as one unified service for smarter scaling.
+  service_to_deployment:
+    redis-cart: cartservice
+  
+  # Input features
+  feature_cols:
+    - CPU
+    - Memory
+    - Latency
+    - RPS_frontend
+    - Users
+  
+  # Target variable
+  target_col: target_replicas
+  service_col: Service
+
+training:
+  # Model training hyperparameters
+  seq_len: 20                # Lookback window (how many past time steps the LSTM analyzes)
+  batch_size: 64             # Number of samples processed before updating model weights
+  epochs: 20                 # Maximum number of training loops
+  hidden_size: 64            # Capacity of the LSTM's memory cells
+  num_layers: 1              # Number of stacked LSTM layers
+  dropout: 0.3               # Regularization technique to prevent overfitting (30%)
+  lr: 0.001                  # Learning Rate: Step size for gradient descent
+  train_frac: 0.70           # 70% of data used for training
+  val_frac: 0.15             # 15% used for validation (leaving 15% for unseen testing)
+  
+  # Training callbacks to prevent overfitting and help the model converge smoothly
+  early_stopping_patience: 7 # Stops training early if the model stops learning for 7 epochs
+  lr_scheduler_patience: 3   # Waits 3 epochs of no improvement before shrinking the learning rate
+  lr_scheduler_factor: 0.5   # Cuts the learning rate in half (0.5) to make finer weight adjustments
+
+inference:
+  # Threshold for rounding continuous predictions to integer replicas
+  tau: 0.45                  # If decimal part > 0.45, scale up to the next integer

@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: monitoring-kube-prometheus-prometheus
+  namespace: monitoring
+spec:
+  replicas: 1
+  serviceAccountName: monitoring-kube-prometheus-prometheus
+  serviceMonitorSelector:
+    matchLabels:
+      release: monitoring
+  podMonitorSelector:
+    matchLabels:
+      release: monitoring
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  enableAdminAPI: true

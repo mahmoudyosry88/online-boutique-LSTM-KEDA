@@ -1,0 +1,12 @@
+spec:
+  template:
+    spec:
+      containers:
+      - name: main
+        env:
+        - name: FRONTEND_ADDR
+          value: "frontend:80"
+        - name: USERS
+          value: "200"
+        - name: RATE
+          value: "1"

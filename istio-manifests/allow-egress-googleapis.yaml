@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# This ServiceEntry allows pods in the Istio mesh to make outbound HTTP/HTTPS
+# requests to Google APIs (like accounts.google.com and *.googleapis.com).
 apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:
@@ -28,6 +30,8 @@ spec:
     protocol: HTTPS
     name: https
 ---
+# This ServiceEntry allows pods to access the Google Compute Engine (GCE)
+# metadata server, which is often required for fetching instance credentials.
 apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:

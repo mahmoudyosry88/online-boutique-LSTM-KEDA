@@ -446,7 +446,7 @@ spec:
           value: "redis-cart:6379"
         resources:
           requests:
-            cpu: 200m
+            cpu: 100m
             memory: 64Mi
           limits:
             cpu: 300m
@@ -878,7 +878,7 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 220Mi
+            memory: 120Mi
           limits:
             cpu: 200m
             memory: 450Mi
@@ -942,8 +942,8 @@ spec:
           value: "9555"
         resources:
           requests:
-            cpu: 200m
-            memory: 180Mi
+            cpu: 100m
+            memory: 100Mi
           limits:
             cpu: 300m
             memory: 300Mi

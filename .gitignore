@@ -26,3 +26,20 @@ obj/
 pkg/
 release/wi-kubernetes-manifests.yaml
 vendor/
+
+# Custom Ignores (Large files, Datasets, Istio, Temp scripts)
+lstm_autoscaler/outputs/
+lstm_autoscaler/data/processed/
+lstm_autoscaler/data/raw/
+lstm_autoscaler/models/
+*.pt
+*.csv
+istio-1.27.9/
+fix.py
+calc.py
+validate.py
+fix_adservice.py
+report.txt
+pres.txt
+
+istio-*/

@@ -1,0 +1,211 @@
+# KEDA ScaledObjects Configuration for Microservices Demo
+# ---------------------------------------------------------
+# This file defines the dynamic autoscaling rules for all microservices.
+# It uses Prometheus triggers to monitor CPU usage across the cluster.
+# 
+# Key Configurations:
+# - Target CPU Utilization is set to 70% (represented as threshold 0.15 based on CPU requests).
+# - Maximum replicas vary based on service criticality and load test results:
+#   * shippingservice: Max 10 (High load during checkout spikes)
+#   * frontend: Max 7 (High traffic entry point)
+#   * other services: Max 5
+# ---------------------------------------------------------
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: adservice-prom-cpu
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: adservice
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
+        query: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="default",pod=~".*adservice.*"}[2m]))
+        threshold: "0.15"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: cartservice-prom-cpu
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: cartservice
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
+        query: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="default",pod=~".*cartservice.*"}[2m]))
+        threshold: "0.15"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: checkoutservice-prom-cpu
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: checkoutservice
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
+        query: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="default",pod=~".*checkoutservice.*"}[2m]))
+        threshold: "0.15"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: currencyservice-prom-cpu
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: currencyservice
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
+        query: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="default",pod=~".*currencyservice.*"}[2m]))
+        threshold: "0.15"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: emailservice-prom-cpu
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: emailservice
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
+        query: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="default",pod=~".*emailservice.*"}[2m]))
+        threshold: "0.15"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: frontend-prom-cpu
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: frontend
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 7
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
+        query: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="default",pod=~".*frontend.*"}[2m]))
+        threshold: "0.15"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: paymentservice-prom-cpu
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: paymentservice
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
+        query: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="default",pod=~".*paymentservice.*"}[2m]))
+        threshold: "0.15"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: productcatalogservice-prom-cpu
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: productcatalogservice
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
+        query: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="default",pod=~".*productcatalogservice.*"}[2m]))
+        threshold: "0.15"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: recommendationservice-prom-cpu
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: recommendationservice
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
+        query: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="default",pod=~".*recommendationservice.*"}[2m]))
+        threshold: "0.15"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: shippingservice-prom-cpu
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: shippingservice
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090
+        query: |
+          sum(rate(container_cpu_usage_seconds_total{namespace="default",pod=~".*shippingservice.*"}[2m]))
+        threshold: "0.15"
